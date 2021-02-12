@@ -18,12 +18,11 @@ Currently supports Windows and Linux (Gnome, Mate, Cinnamon and KDE Plasma.
 ### The currently supported desktop environments are:
  - Windows (not really a de)
  - Gnome
-
+ -	Mate
+ - Cinnamon
 
 ### The currently planned to be supported desktop environments are:
 
 -	MacOS (again not really a de, also i don't have a mac)
--	Mate
- - Cinnamon
- - KDE Plasma
+- KDE Plasma
 -	Others
