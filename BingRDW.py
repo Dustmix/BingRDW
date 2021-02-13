@@ -10,6 +10,10 @@ import ctypes
 import sys
 from fun import update, first_time_here
 
+netTestUrl = 'http://www.google.com'
+markets = ['zh-CN', 'en-US', 'ja-JP', 'en-AU', 'en-UK', 'de-DE', 'en-NZ', 'en-CA']
+disableAutoUpdates = False
+
 # What platform is this running from
 if sys.platform == "linux" or sys.platform == "linux2":
     platform = "linux"
@@ -23,19 +27,18 @@ else:
     platform = "unknown"
     print("Warning! This platform is not supported, I don't even know what's the os.")
 
-# Network test variable
-url = 'http://www.google.com'
-markets = ['zh-CN', 'en-US', 'ja-JP', 'en-AU', 'en-UK', 'de-DE', 'en-NZ', 'en-CA']
-
 # Check Interwebz
 while True: # I put it as an infinite loop because this program is ment to be run on a schedule everyday so it retrys until it find a connection
     try:
-        _ = requests.get(url, str(10))
+        _ = requests.get(netTestUrl, str(10))
     except requests.ConnectionError:
         print("PC isn't connected to the internet. Retrying...")
     else:
         print("PC is connected to the internet! Continuing...")
-        #update(os.path.basename(__file__))
+        if disableAutoUpdates == True:
+            print("Autoupdates are disabled! If this is a bug or the updates create a bug please report this in the issues tab in the github page")
+        else:
+            update(os.path.basename(__file__))
         break
 
 # Loading variables or running intial setup
