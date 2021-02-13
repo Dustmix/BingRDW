@@ -29,6 +29,14 @@ else:
     platform = "unknown"
     print("Warning! This platform is not supported, I don't even know what's the os.")
 
+# Loading variables or running intial setup
+if os.path.isfile('brdwvars.pickle'):
+    with open('brdwvars.pickle', 'rb') as f: 
+        old_index, old_mkt_int, res, applyWall, RemoveImg, Desktop, fehoption = pickle.load(f)
+else:
+    first_time_here(platform=platform)
+    sys.exit()
+
 # Check Interwebz
 while True: # I put it as an infinite loop because this program is ment to be run on a schedule everyday so it retrys until it find a connection
     try:
@@ -44,14 +52,6 @@ while True: # I put it as an infinite loop because this program is ment to be ru
         else:
             update(os.path.basename(__file__))
         break
-
-# Loading variables or running intial setup
-if os.path.isfile('brdwvars.pickle'):
-    with open('brdwvars.pickle', 'rb') as f: 
-        old_index, old_mkt_int, res, applyWall, RemoveImg, Desktop, fehoption = pickle.load(f)
-else:
-    first_time_here(platform=platform)
-    sys.exit()
 
 # Setting index and mkt and duplicate index and mkt prevention
 while True:
