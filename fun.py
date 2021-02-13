@@ -111,25 +111,25 @@ def first_time_here(platform):
         pickle.dump([old_index, old_mkt_int, res, applyWall, RemoveImg, Desktop, fehoption], f)
 
 def update(fname):
-    # Download a new MD5
+    # Download a new sha256
     repo = "https://raw.githubusercontent.com/Dustmix/BingRDW/main"
     newfname = fname + "_new.py"
     funame = os.path.basename(__file__)
     newfuname = funame + "_new.py"
 
-    r = requests.get(repo + "/MD5", stream = True)
+    r = requests.get(repo + "/SHA256", stream = True)
     if r.status_code == 200:
-        new_py_md5, new_fun_md5 = r.text.splitlines()
+        new_py_sha256, new_fun_sha256 = r.text.splitlines()
 
-    # Check current file md5
+    # Check current file sha256
     with open(fname, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
-            hashlib.md5().update(chunk)
+            hashlib.sha256().update(chunk)
 
-    old_md5 = hashlib.md5().hexdigest()
+    old_sha256 = hashlib.sha256().hexdigest()
 
-    # Compare MD5
-    if old_md5.casefold() != new_py_md5.casefold():
+    # Compare sha256
+    if old_sha256.casefold() != new_py_sha256.casefold():
         print("Found a new update! Updating...")
         # Updating begins now.
         r = requests.get(repo + "/BingRDW.py", stream = True)
@@ -142,11 +142,11 @@ def update(fname):
             # Compare 1/2
             with open(newfname, "rb") as fr:
                 for chunk in iter(lambda: fr.read(4096), b""):
-                    hashlib.md5().update(chunk)
+                    hashlib.sha256().update(chunk)
                 fr.close()
                 
-                old_md5 = hashlib.md5().hexdigest()
-                if old_md5.casefold() != new_py_md5.casefold():
+                old_sha256 = hashlib.sha256().hexdigest()
+                if old_sha256.casefold() != new_py_sha256.casefold():
                     print("Download successful! (1/2)")
                     # Download 2/2
                     r = requests.get(repo + "/fun.py", stream = True)
@@ -159,11 +159,11 @@ def update(fname):
                         # Compare 2/2
                         with open(newfuname, "rb") as fr:
                             for chunk in iter(lambda: fr.read(4096), b""):
-                                hashlib.md5().update(chunk)
+                                hashlib.sha256().update(chunk)
                             fr.close()
 
-                        old_md5 = hashlib.md5().hexdigest()
-                        if old_md5.casefold() != new_fun_md5.casefold():
+                        old_sha256 = hashlib.sha256().hexdigest()
+                        if old_sha256.casefold() != new_fun_sha256.casefold():
                             print("Download successful! (2/2)")
                             print("Great! Continuing update...")
                             os.remove(fname)
