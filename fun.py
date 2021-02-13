@@ -141,8 +141,8 @@ def update(fname):
                 f.close()
             # Compare 1/2
                 old_sha256 = hashlib.sha256(file_as_bytes(open(newfname, 'rb'))).hexdigest()
-
-                if old_sha256.casefold() != new_py_sha256.casefold():
+                
+                if old_sha256.casefold() == new_py_sha256.casefold():
                     print("Download successful! (1/2)")
                     # Download 2/2
                     r = requests.get(repo + "/fun.py", stream = True)
@@ -155,7 +155,7 @@ def update(fname):
                         # Compare 2/2
                         old_sha256 = hashlib.sha256(file_as_bytes(open(newfuname, 'rb'))).hexdigest()
 
-                        if old_sha256.casefold() != new_fun_sha256.casefold():
+                        if old_sha256.casefold() == new_fun_sha256.casefold():
                             print("Download successful! (2/2)")
                             print("Great! Continuing update...")
                             os.remove(fname)
