@@ -6,6 +6,10 @@ import hashlib
 import shutil
 import sys
 
+def file_as_bytes(file):
+    with file:
+        return file.read()
+
 # FUNction (I hate this)
 def first_time_here(platform):
     print("It seems you haven't used this thing yet...")
@@ -121,12 +125,8 @@ def update(fname):
     if r.status_code == 200:
         new_py_sha256, new_fun_sha256 = r.text.splitlines()
 
-    # Check current file sha256
-    with open(fname, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hashlib.sha256().update(chunk)
-
-    old_sha256 = hashlib.sha256().hexdigest()
+    # Get and check current sha256
+    old_sha256 = hashlib.sha256(file_as_bytes(open(fname, 'rb'))).hexdigest()
 
     # Compare sha256
     if old_sha256.casefold() != new_py_sha256.casefold():
@@ -140,12 +140,8 @@ def update(fname):
                 shutil.copyfileobj(r.raw, f)
                 f.close()
             # Compare 1/2
-            with open(newfname, "rb") as fr:
-                for chunk in iter(lambda: fr.read(4096), b""):
-                    hashlib.sha256().update(chunk)
-                fr.close()
-                
-                old_sha256 = hashlib.sha256().hexdigest()
+                old_sha256 = hashlib.sha256(file_as_bytes(open(newfname, 'rb'))).hexdigest()
+
                 if old_sha256.casefold() != new_py_sha256.casefold():
                     print("Download successful! (1/2)")
                     # Download 2/2
@@ -157,12 +153,8 @@ def update(fname):
                             shutil.copyfileobj(r.raw, f)
                             f.close()
                         # Compare 2/2
-                        with open(newfuname, "rb") as fr:
-                            for chunk in iter(lambda: fr.read(4096), b""):
-                                hashlib.sha256().update(chunk)
-                            fr.close()
+                        old_sha256 = hashlib.sha256(file_as_bytes(open(newfuname, 'rb'))).hexdigest()
 
-                        old_sha256 = hashlib.sha256().hexdigest()
                         if old_sha256.casefold() != new_fun_sha256.casefold():
                             print("Download successful! (2/2)")
                             print("Great! Continuing update...")
