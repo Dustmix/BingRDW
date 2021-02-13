@@ -8,11 +8,13 @@ import shutil
 import pathlib
 import ctypes
 import sys
+import time
 from fun import update, first_time_here
 
 netTestUrl = 'http://www.google.com'
 markets = ['zh-CN', 'en-US', 'ja-JP', 'en-AU', 'en-UK', 'de-DE', 'en-NZ', 'en-CA']
 disableAutoUpdates = False
+nettime = 10
 
 # What platform is this running from
 if sys.platform == "linux" or sys.platform == "linux2":
@@ -30,9 +32,11 @@ else:
 # Check Interwebz
 while True: # I put it as an infinite loop because this program is ment to be run on a schedule everyday so it retrys until it find a connection
     try:
-        _ = requests.get(netTestUrl, str(10))
+        _ = requests.get(netTestUrl)
     except requests.ConnectionError:
         print("PC isn't connected to the internet. Retrying...")
+        time.sleep(nettime)
+        nettime = nettime + 5
     else:
         print("PC is connected to the internet! Continuing...")
         if disableAutoUpdates == True:
